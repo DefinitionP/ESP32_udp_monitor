@@ -23,6 +23,7 @@ namespace udp_test
         public static bool clear_flag = false;
         static void Main(string[] args)
         {
+            // создание объектов узлов и добавление их в список
             RemoteNode.Nodes.Add(new RemoteNode(8888, "1", ConsoleColor.DarkGreen));
             RemoteNode.Nodes.Add(new RemoteNode(8889, "2", ConsoleColor.DarkBlue));
             RemoteNode.Nodes.Add(new RemoteNode(8890, "3", ConsoleColor.DarkMagenta));
@@ -30,16 +31,19 @@ namespace udp_test
             RemoteNode.Nodes.Add(new RemoteNode(8892, "5", ConsoleColor.DarkYellow));
 
             Console.WindowWidth = Console.LargestWindowWidth - 30;
+            // вывод ip-адреса
             print_my_ip();
             Console.WriteLine();
+            // запуск потоков с прослушиванием udp для всех портов
             RemoteNode.StartListening();
-
+            // запуск потока для отслеживания ввода с клавиатруы
             Thread thread = new Thread(key_parse);
             thread.IsBackground = true;
             thread.Start();
-
+            // цикл с выводом сообщений от узлов в консоль
             while (true)
             {
+                // очистка экрана консоли, если нажата клавиша С
                 if (clear_flag == true)
                 {
                     clear_flag = false;
@@ -47,11 +51,15 @@ namespace udp_test
                 }
                 foreach (var node in RemoteNode.Nodes)
                 {
+                    // если в списке сообщений узла есть элементы
                     if (node.messages.Count() > 0)
                     {
+                        // устанавливаем цвет вывода
                         Console.ForegroundColor = node.consoleColor;
+                        // выводим сообщение
                         Console.WriteLine(node.messages.First());
                         Console.ForegroundColor = ConsoleColor.White;
+                        // удаляем сообщение из списка
                         node.messages.RemoveAt(0);
                     }
                 }

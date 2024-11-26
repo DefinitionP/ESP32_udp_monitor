@@ -9,17 +9,25 @@ using System.Net;
 
 namespace udp_test
 {
+    // класс для хранения данных узла mesh-сети
     internal class RemoteNode
     {
+        // список узлов
         public static List<RemoteNode> Nodes = new List<RemoteNode>();
+        // адрес устройства
         public static IPAddress desktop_ip = IPAddress.None;
 
+        // цвет, которым в консоли выделяются сообщения от узла
         public ConsoleColor consoleColor;
+        // порт устройства, на который узел отправляет сообщения 
         public int port;
         public UdpClient udp;
         public IPEndPoint endPoint;
+        // имя узла
         public string name;
+        // ссылка на объект потока, который получает сообщения по udp
         public Thread listenThread;
+        
         public List<string> messages = new List<string>();
         public RemoteNode(int port, string name, ConsoleColor consoleColor)
         {
